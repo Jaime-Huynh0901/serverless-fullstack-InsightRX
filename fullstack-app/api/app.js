@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const passport = require("passport");
-const { users } = require("./controllers");
+// const { users } = require("./controllers");
 const port = process.env.PORT || 3001;
 const cors = require("cors");
 
@@ -13,15 +13,6 @@ if (app.get("env") === "development") {
 /** Initialize Cache **/
 const redisStore = require("./server/cache/redis");
 redisStore.initCacheStore();
-
-/**
- * Inference:
- *
- * When "inference" in serverless.yml is "true", the Serverless Framework will attempt to
- * initialize this application on every deployment, extract its endpoints and generate an OpenAPI specification (super cool)
- * However, the Framework won't have access to the environment variables, causing some things to crash on load.
- * That is why some things have try/catch blocks around them when they are required.
- */
 
 /**
  * Configure Passport
@@ -55,51 +46,12 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Since Express doesn't support error handling of promises out of the box,
-// this handler enables that
-const asyncHandler = (fn) => (req, res, next) => {
-  return Promise.resolve(fn(req, res, next)).catch(next);
-};
-
-/**
- * Routes - Public
- */
-
+//------- Start routes
+// Routes
+// =============================================================
+// import routes to the app.js.
 require("./routes")(app);
-
-app.options(`*`, (req, res) => {
-  res.status(200).send();
-});
-
-app.post(`/users/register`, asyncHandler(users.register));
-
-app.post(`/users/login`, asyncHandler(users.login));
-
-app.get(`/test/`, (req, res) => {
-  res.status(200).send("Request received");
-});
-
-app.get("/hello", function (req, res) {
-  res.status(200).send("Hello World!");
-});
-
-/**
- * Routes - Protected
- */
-
-app.post(
-  `/user`,
-  passport.authenticate("jwt", { session: false }),
-  asyncHandler(users.get)
-);
-
-/**
- * Routes - Catch-All
- */
-
-app.get(`/*`, (req, res) => {
-  res.status(404).send("Route not found");
-});
+//------- End routes
 
 /**
  * Error Handler

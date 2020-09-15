@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const production  = 'https://sheltered-shelf-78967.herokuapp.com';
-const development = 'http://localhost:3001';
-const url = (process.env.NODE_ENV==="development" ? development : production);
+const production = "http://website-sqazxz7.s3-website.us-east-1.amazonaws.com/";
+const development = "http://localhost:3001";
+const url = process.env.NODE_ENV === "development" ? development : production;
 
 export default axios.create({
   baseURL: url,
   headers: {
-    "Content-type": "application/json"
-  }
+    "Content-type": "application/json",
+  },
 });
