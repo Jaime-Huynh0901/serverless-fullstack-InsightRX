@@ -2,6 +2,17 @@ const express = require("express");
 const app = express();
 const passport = require("passport");
 const { users } = require("./controllers");
+const port = process.env.PORT || 3001;
+const cors = require("cors");
+
+// Env file
+if (app.get("env") === "development") {
+  require("dotenv").config();
+}
+
+/** Initialize Cache **/
+const redisStore = require("./server/cache/redis");
+redisStore.initCacheStore();
 
 /**
  * Inference:
@@ -27,6 +38,7 @@ try {
  */
 
 // Enable CORS
+app.use(cors());
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "*");
@@ -40,6 +52,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Enable JSON use
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Since Express doesn't support error handling of promises out of the box,
@@ -51,6 +64,8 @@ const asyncHandler = (fn) => (req, res, next) => {
 /**
  * Routes - Public
  */
+
+require("./routes")(app);
 
 app.options(`*`, (req, res) => {
   res.status(200).send();
@@ -94,6 +109,10 @@ app.use(function (err, req, res, next) {
   res
     .status(500)
     .json({ error: `Internal Serverless Error - "${err.message}"` });
+});
+
+app.listen(port, () => {
+  console.log(`The application is running on localhost:${port}`);
 });
 
 module.exports = app;
