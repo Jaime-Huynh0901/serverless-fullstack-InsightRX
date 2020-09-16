@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import httpRequest from "../../clientsideAPI/httpRequest";
 
 const useForm = (callback, validate, validateNested) => {
+  // Initial State
   const blankEventType = {
     eventType: "",
     sourceName: "",
@@ -14,11 +15,13 @@ const useForm = (callback, validate, validateNested) => {
   };
 
   const nestedBlankProperty = {
+    index: 0,
     property: "",
     typeOfProp: "",
     valOfProp: "",
   };
 
+  // All the states
   const [eventTypeState, setEventTypeState] = useState(blankEventType);
   const [errors, setErrors] = useState({});
   const [errorProp, setPropErrors] = useState([{}]);
@@ -33,11 +36,15 @@ const useForm = (callback, validate, validateNested) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [display, setDisplay] = useState(false);
   const [show, setShow] = useState(false);
-
   const [modalData, setModalData] = useState(blankEventType);
+  const [savedObject, setSavedObject] = useState(false);
+  const [objectIndex, setObjectIndex] = useState(0);
 
+  // All the handler function
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleSaveObject = () => setSavedObject(true);
 
   const removeProperty = (e) => {
     const index = e.target.dataset.idx;
@@ -89,6 +96,7 @@ const useForm = (callback, validate, validateNested) => {
 
   const addProperty = () => {
     setPropState([...propState, { ...blankProperty }]);
+    setObjectIndex(objectIndex + 1);
   };
 
   const handleEventPropChange = (event) => {
@@ -115,7 +123,9 @@ const useForm = (callback, validate, validateNested) => {
   };
 
   const addNestedProperty = () => {
+    nestedBlankProperty.index = objectIndex;
     setNestedPropState([...nestedPropState, { ...nestedBlankProperty }]);
+    setSavedObject(false);
   };
 
   const handleNestedPropChange = (event) => {
@@ -160,6 +170,10 @@ const useForm = (callback, validate, validateNested) => {
     }
   }, [errorProp]);
 
+  useEffect(() => {
+    getSourceData();
+  }, []);
+
   const submitData = () => {
     const data = {
       staticField: eventTypeState,
@@ -188,10 +202,6 @@ const useForm = (callback, validate, validateNested) => {
     }
   };
 
-  useEffect(() => {
-    getSourceData();
-  }, []);
-
   return {
     addProperty,
     addNestedProperty,
@@ -207,6 +217,7 @@ const useForm = (callback, validate, validateNested) => {
     submitData,
     handleAutoComplete,
     handleClose,
+    handleSaveObject,
     propState,
     isObjectState,
     nestedPropState,
@@ -219,6 +230,7 @@ const useForm = (callback, validate, validateNested) => {
     display,
     show,
     modalData,
+    savedObject,
   };
 };
 

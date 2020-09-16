@@ -13,14 +13,15 @@ export const EventTypeForm = () => {
     removeNestedProperty,
     handleReset,
     handleEventTypeChange,
-    handleNestedTypeSelectChange,
-    handleTypeSelectChange,
     handleEventPropChange,
     handleNestedPropChange,
     handleSubmit,
+    handleTypeSelectChange,
+    handleNestedTypeSelectChange,
     submitData,
     handleAutoComplete,
     handleClose,
+    handleSaveObject,
     propState,
     isObjectState,
     nestedPropState,
@@ -33,6 +34,7 @@ export const EventTypeForm = () => {
     display,
     show,
     modalData,
+    savedObject,
   } = useForm(submit, validate, validateProperty);
 
   function submit() {
@@ -103,17 +105,28 @@ export const EventTypeForm = () => {
           marginBottom: 20,
         }}
       >
-        {propState[0].property && propState[0].valOfProp ? (
+        {(propState[0].property && propState[0].valOfProp) ||
+        (propState[0].property && propState[0].typeOfProp === "object") ? (
           <input type="button" value="Add New Property" onClick={addProperty} />
         ) : null}
 
         {isObjectState ? (
-          <input
-            type="button"
-            value="Add New Nested Property"
-            onClick={addNestedProperty}
-          />
+          <div>
+            <input
+              type="button"
+              value="Add New Nested Property"
+              onClick={addNestedProperty}
+            />
+            {!savedObject ? (
+              <input
+                type="button"
+                value="Save the Object"
+                onClick={handleSaveObject}
+              />
+            ) : null}
+          </div>
         ) : null}
+
         <input type="reset" value="Reset" onClick={handleReset} />
         <input type="submit" value="Submit" onClick={handleSubmit} />
       </div>

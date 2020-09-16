@@ -26,6 +26,9 @@ const PropInputs = ({
     idx
   );
 
+  let nestedArray = nestedPropState.filter((arr) => arr.index === idx);
+  console.log(nestedArray);
+
   return (
     <div
       style={{
@@ -52,44 +55,50 @@ const PropInputs = ({
             handleTypeSelectChange={handleTypeSelectChange}
             required
           />
-          <label htmlFor={valId}>{`Value #${idx + 1}`}</label>
-          <input
-            name={valId}
-            data-idx={idx}
-            id={valId}
-            className="valOfProp"
-            value={propState[idx].valOfProp}
-            onChange={handleEventPropChange}
-            type={type}
-            required
-          />
-          <input
-            type="button"
-            name={delId}
-            data-idx={idx}
-            id={delId}
-            className="deleteButton"
-            value="Delete"
-            onClick={removeProperty}
-          />
-          {errorProp[idx].errMessage && <p>{errorProp[idx].errMessage}</p>}
+          <div>
+            {type !== "object" ? (
+              <div>
+                <label htmlFor={valId}>{`Value #${idx + 1}`}</label>
+                <input
+                  name={valId}
+                  data-idx={idx}
+                  id={valId}
+                  className="valOfProp"
+                  value={propState[idx].valOfProp}
+                  onChange={handleEventPropChange}
+                  type={type}
+                />
+                <input
+                  type="button"
+                  name={delId}
+                  data-idx={idx}
+                  id={delId}
+                  className="deleteButton"
+                  value="Delete"
+                  onClick={removeProperty}
+                />
+                {errorProp[idx].errMessage && (
+                  <p>{errorProp[idx].errMessage}</p>
+                )}
+              </div>
+            ) : (
+              nestedArray.map((val, nestedidx) => (
+                <NestedPropInput
+                  key={`prop-${nestedidx}`}
+                  nestedidx={nestedidx}
+                  nestedPropState={nestedPropState}
+                  errorProp={errorProp}
+                  handleTypeSelectChange={handleTypeSelectChange}
+                  removeNestedProperty={removeNestedProperty}
+                  handleNestedPropChange={handleNestedPropChange}
+                  handleNestedTypeSelectChange={handleNestedTypeSelectChange}
+                />
+              ))
+            )}
+          </div>
         </div>
+        <br />
       </div>
-      {type === "object"
-        ? nestedPropState.map((val, nestedidx) => (
-            <NestedPropInput
-              key={`prop-${nestedidx}`}
-              nestedidx={nestedidx}
-              nestedPropState={nestedPropState}
-              errorProp={errorProp}
-              handleTypeSelectChange={handleTypeSelectChange}
-              removeNestedProperty={removeNestedProperty}
-              handleNestedPropChange={handleNestedPropChange}
-              handleNestedTypeSelectChange={handleNestedTypeSelectChange}
-            />
-          ))
-        : null}
-      <br />
     </div>
   );
 };
