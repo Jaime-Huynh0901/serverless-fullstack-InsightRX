@@ -59,6 +59,9 @@ const NestedPropInput = ({
           value="Delete"
           onClick={removeNestedProperty}
         />
+        {errorProp[nestedidx].errMessage && (
+          <p>{errorProp[nestedidx].errMessage}</p>
+        )}
       </div>
     </div>
   );

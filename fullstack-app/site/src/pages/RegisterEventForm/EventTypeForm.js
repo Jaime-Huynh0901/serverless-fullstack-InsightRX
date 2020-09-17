@@ -22,6 +22,7 @@ export const EventTypeForm = () => {
     handleAutoComplete,
     handleClose,
     handleSaveObject,
+    handleUpdateIndex,
     propState,
     isObjectState,
     nestedPropState,
@@ -85,7 +86,6 @@ export const EventTypeForm = () => {
           removeNestedProperty={removeNestedProperty}
           handleNestedPropChange={handleNestedPropChange}
           handleNestedTypeSelectChange={handleNestedTypeSelectChange}
-          addNestedProperty={addNestedProperty}
         />
       ))}
       {submitted ? (
@@ -115,7 +115,10 @@ export const EventTypeForm = () => {
             <input
               type="button"
               value="Add New Nested Property"
-              onClick={addNestedProperty}
+              onClick={(e) => {
+                handleUpdateIndex();
+                addNestedProperty();
+              }}
             />
             {!savedObject ? (
               <input

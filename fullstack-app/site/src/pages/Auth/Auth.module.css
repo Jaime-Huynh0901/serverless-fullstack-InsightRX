@@ -57,7 +57,7 @@
   align-content: center;
   justify-content: center;
   text-align: center;
-  color: #FD5750;
+  color: #fd5750;
   font-size: 18px;
 }
 
@@ -74,9 +74,11 @@
   font-size: 22px;
 }
 
-.containerRegister {}
+.containerRegister {
+}
 
-.containerSignIn {}
+.containerSignIn {
+}
 
 .formType {
   display: flex;
@@ -85,7 +87,7 @@
   width: 100%;
   padding: 10px 0;
   font-size: 22px;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
   text-transform: lowercase;
   user-select: none;
 }
@@ -95,8 +97,8 @@
   width: 50%;
   padding: 5px 40px 5px 0;
   justify-content: flex-end;
-  border-right: 2px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.6);
+  border-right: 2px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .formTypeRegister:hover {
@@ -108,7 +110,7 @@
   width: 50%;
   padding: 5px 0 5px 40px;
   text-align: left;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .formTypeSignIn:hover {
@@ -116,7 +118,7 @@
 }
 
 .formTypeActive {
-  color: rgba(255,255,255,1);
+  color: rgba(255, 255, 255, 1);
 }
 
 .form {
@@ -135,7 +137,6 @@
   margin-bottom: 25px;
 }
 
-
 .formLabel {
   font-size: 19px;
   font-weight: 500;
@@ -148,37 +149,37 @@
   text-align: center;
   font-size: 22px;
   padding: 10px 0px 22px 0px;
-  border-bottom: 1.5px solid rgba(255,255,255,0.4);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.4);
   border-top: 1.5px solid transparent;
   border-right: 1.5px solid transparent;
   border-left: 1.5px solid transparent;
   transition: all 0.6s ease;
   background: none;
   outline: none;
-  color: #ffffff;
+  color: black;
   caret-color: white;
 }
 
 .formInput::placeholder {
   text-align: center;
   font-size: 22px;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
   margin: 0;
 }
 
 .formInput:focus {
-  border-bottom: 1.5px solid rgba(255,255,255,1);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 1);
 }
 
 .formError {
   margin: 10px 0 10px 0;
-  color: #FD5750;
+  color: #fd5750;
   font-size: 18px;
   line-height: 32px;
 }
 
 .formButton {
-  margin: 16px auto 0 auto!important;
+  margin: 16px auto 0 auto !important;
 }
 
 .formButton:hover {
@@ -200,13 +201,13 @@
   width: 100%;
   padding: 10px 0;
   font-size: 19px;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
   transition: all 0.3s ease;
 }
 
 .forgotPassword:hover {
   cursor: pointer;
-  color: rgba(255,255,255,1);
+  color: rgba(255, 255, 255, 1);
 }
 
 .githubLink {
@@ -219,7 +220,7 @@
 
 .githubLink a {
   font-size: 20px;
-  color: #FD5750;
+  color: #fd5750;
   opacity: 0.7;
   transition: all 0.3s ease;
   text-decoration: none;
