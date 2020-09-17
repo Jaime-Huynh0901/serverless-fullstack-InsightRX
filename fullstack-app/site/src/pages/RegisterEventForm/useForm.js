@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import httpRequest from "../../clientsideAPI/httpRequest";
 
 const useForm = (callback, validate, validateNested) => {
+  // Initial State
   const blankEventType = {
     eventType: "",
     sourceName: "",
@@ -13,31 +14,55 @@ const useForm = (callback, validate, validateNested) => {
     valOfProp: "",
   };
 
-  const nestedBlankProperty = {
+  let nestedBlankProperty = {
+    // index is the index of the nested object property
+    index: 0,
+    // propNum is the index of the Property that the nested object belong to
+    propNum: 0,
     property: "",
     typeOfProp: "",
     valOfProp: "",
   };
 
+  // All the states
+
+  // state to get and set event Type, Source Name & Version number
   const [eventTypeState, setEventTypeState] = useState(blankEventType);
-  const [errors, setErrors] = useState({});
-  const [errorProp, setPropErrors] = useState([{}]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // state to get and set dynamic property name , type of the property and value of the property
   const [propState, setPropState] = useState([{ ...blankProperty }]);
+
+  // State to get and set event Type, Source Name & Version number
   const [nestedPropState, setNestedPropState] = useState([
     { ...nestedBlankProperty },
   ]);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [isObjectState, setIsObjectState] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [sourceName, setSourceName] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
+
   const [display, setDisplay] = useState(false);
   const [show, setShow] = useState(false);
 
+  // State to get and set the modal data of the submitted event type, source name and version number
   const [modalData, setModalData] = useState(blankEventType);
+  const [savedObject, setSavedObject] = useState(false);
+  const [objectIndex, setObjectIndex] = useState(0);
+  const [nestedObjectIndex, setnestedObjectIndex] = useState(1);
 
+  // state to get and set errors message
+  const [errors, setErrors] = useState({});
+  const [errorProp, setPropErrors] = useState([{}]);
+
+  // All the handler function
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleSaveObject = () => setSavedObject(true);
+  const handleUpdateIndex = () => setnestedObjectIndex(nestedObjectIndex + 1);
 
   const removeProperty = (e) => {
     const index = e.target.dataset.idx;
@@ -89,6 +114,7 @@ const useForm = (callback, validate, validateNested) => {
 
   const addProperty = () => {
     setPropState([...propState, { ...blankProperty }]);
+    setObjectIndex(objectIndex + 1);
   };
 
   const handleEventPropChange = (event) => {
@@ -115,7 +141,10 @@ const useForm = (callback, validate, validateNested) => {
   };
 
   const addNestedProperty = () => {
+    nestedBlankProperty.propNum = objectIndex;
+    nestedBlankProperty.index = nestedObjectIndex;
     setNestedPropState([...nestedPropState, { ...nestedBlankProperty }]);
+    setSavedObject(false);
   };
 
   const handleNestedPropChange = (event) => {
@@ -160,6 +189,10 @@ const useForm = (callback, validate, validateNested) => {
     }
   }, [errorProp]);
 
+  useEffect(() => {
+    getSourceData();
+  }, []);
+
   const submitData = () => {
     const data = {
       staticField: eventTypeState,
@@ -188,10 +221,6 @@ const useForm = (callback, validate, validateNested) => {
     }
   };
 
-  useEffect(() => {
-    getSourceData();
-  }, []);
-
   return {
     addProperty,
     addNestedProperty,
@@ -207,6 +236,8 @@ const useForm = (callback, validate, validateNested) => {
     submitData,
     handleAutoComplete,
     handleClose,
+    handleSaveObject,
+    handleUpdateIndex,
     propState,
     isObjectState,
     nestedPropState,
@@ -219,6 +250,7 @@ const useForm = (callback, validate, validateNested) => {
     display,
     show,
     modalData,
+    savedObject,
   };
 };
 

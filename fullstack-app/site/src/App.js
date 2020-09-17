@@ -5,7 +5,11 @@ import Auth from "./pages/Auth/Auth";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import { getSession } from "./utils";
 import { EventTypeForm } from "./pages/RegisterEventForm/EventTypeForm";
-import "bootstrap/dist/css/bootstrap.css";
+
+import "antd/dist/antd.css";
+import "./css1-normalize.css";
+import "./css2-skeleton.css";
+import "./css3-antd-custom.less";
 
 const App = () => {
   return (

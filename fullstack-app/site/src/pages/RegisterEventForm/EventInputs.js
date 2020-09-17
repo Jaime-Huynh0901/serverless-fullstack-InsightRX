@@ -1,5 +1,5 @@
 import React from "react";
-// import { useAutocomplete } from "../../components/AutoComplete/useAutocomplete";
+import { useAutocomplete } from "../AutoComplete/useAutocomplete";
 
 const EventInputs = ({
   eventTypeState,
@@ -10,8 +10,8 @@ const EventInputs = ({
   sourceName,
   display,
 }) => {
-  //   const corpus = sourceName;
-  //   const [completions] = useAutocomplete(searchTerm, corpus);
+  const corpus = sourceName;
+  const [completions] = useAutocomplete(searchTerm, corpus);
 
   return (
     <div
@@ -102,14 +102,14 @@ const EventInputs = ({
                   width: "172px",
                 }}
               >
-                {/* {display &&
+                {display &&
                   completions.map((item, idx) => {
                     return (
                       <p key={idx} onClick={() => handleAutoComplete(item)}>
                         {item}
                       </p>
                     );
-                  })} */}
+                  })}
               </div>
               {errors.sourceName && <p>{errors.sourceName}</p>}
             </div>
