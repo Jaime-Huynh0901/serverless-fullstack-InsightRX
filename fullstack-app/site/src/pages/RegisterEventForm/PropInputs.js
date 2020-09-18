@@ -1,7 +1,20 @@
 import React from "react";
 import useDropdown from "./useDropdown";
 import NestedPropInput from "./NestedPropInput";
-import { Form, Input, Button, Row, Col, Space } from "antd";
+import { Form, Card, Button, Row, Col, Space, Divider } from "antd";
+import styled from "styled-components";
+
+// const layout = { labelCol: { span: 24 }, wrapperCol: { span: 32 } };
+// const Content = styled.div`
+//   max-width: 1080px;
+//   z-index: 2;
+//   width: 100%;
+//   border: 1px solid #001529;
+//   border-radius: 5px;
+//   padding: 10px;
+//   margin: 0 auto;
+//   margin-top: 0;
+// `;
 
 const PropInputs = ({
   idx,
@@ -14,13 +27,14 @@ const PropInputs = ({
   removeProperty,
   removeNestedProperty,
   errorProp,
+  errorNestedProp,
 }) => {
   const propId = `prop-${idx}`;
   const valId = `val-${idx}`;
   const delId = `del-${idx}`;
   const typeList = ["string", "number", "object", "array", "boolean"];
   const [type, TypeOfProp] = useDropdown(
-    "",
+    "        ",
     "",
     typeList,
     handleTypeSelectChange,
@@ -28,13 +42,13 @@ const PropInputs = ({
   );
 
   return (
-    <div className="registerEventForm2">
-      <div key={`prop-${idx}`}>
-        <div>
+    <div>
+      <div className="registerEventForm2">
+        <div key={`props-${idx}`}>
           <Form layout="inline" className="registerEventForm form-group">
             <Space>
-              <Row gutter={[24, 16]}>
-                <Col span={6}>
+              <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+                <Col className="gutter-row" span={6}>
                   <Form.Item label={`Property #${idx + 1}`}>
                     <input
                       type="text"
@@ -48,15 +62,14 @@ const PropInputs = ({
                   </Form.Item>
                 </Col>
                 <Col span={1} />
-                <Col span={5}>
-                  <Form.Item label={`Prop Type`}>
+                <Col className="gutter-row" span={5}>
+                  <Form.Item>
                     <TypeOfProp
                       handleTypeSelectChange={handleTypeSelectChange}
-                      required
                     />
                   </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col className="gutter-row" span={6}>
                   {type !== "object" ? (
                     <Form.Item label={`Value #${idx + 1}`}>
                       <input
@@ -71,8 +84,9 @@ const PropInputs = ({
                     </Form.Item>
                   ) : null}
                 </Col>
+                <Col span={1} />
 
-                <Col span={6}>
+                <Col className="gutter-row" span={5}>
                   <Form.Item>
                     <input
                       type="button"
@@ -97,7 +111,7 @@ const PropInputs = ({
                 .map((val) => (
                   <Form.Item>
                     <NestedPropInput
-                      key={`prop-${val.index}`}
+                      key={`Nestedprop-${val.index}`}
                       nestedidx={val.index}
                       nestedPropState={nestedPropState}
                       errorProp={errorProp}
@@ -107,12 +121,15 @@ const PropInputs = ({
                       handleNestedTypeSelectChange={
                         handleNestedTypeSelectChange
                       }
+                      errorNestedProp={errorNestedProp}
                     />
                   </Form.Item>
                 ))
             : null}
         </div>
       </div>
+
+      <Divider />
     </div>
   );
 };
