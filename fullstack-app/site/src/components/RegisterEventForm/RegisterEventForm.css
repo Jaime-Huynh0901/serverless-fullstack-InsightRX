@@ -1,0 +1,35 @@
+.registerEventForm1 {
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+.registerEventForm3 {
+  width: 100%;
+  max-width: 800px;
+  border-left: 1px solid #001529;
+  border-right: 1px solid #001529;
+  border-bottom: 1px solid #001529;
+  padding: 20px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.asterisk {
+  display: inline-block;
+  margin-right: 4px;
+  color: #f5222d !important;
+  font-size: 14px;
+  font-family: SimSun, sans-serif;
+  line-height: 1;
+}
+
+.autoMargin {
+  margin: 0 auto;
+}
+
+.textCenter {
+  text-align: center;
+}

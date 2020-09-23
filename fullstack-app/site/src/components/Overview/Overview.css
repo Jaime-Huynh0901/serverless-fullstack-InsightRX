@@ -1,0 +1,49 @@
+
+
+
+.overview {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    margin: 0 auto;
+    margin-top: 20px;
+    border: 1px solid #001529;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    }
+
+.antd-col { 
+    height: 100%;
+    min-height: 200px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.antd-card {
+    background-color: #007bff;
+}
+
+.text-white {
+    color: #ffffff !important;
+}
+
+.barchart {
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.linechart {
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.linechart-events {
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-top: 20px;    
+}

@@ -37,5 +37,5 @@ export default {
   getSources,
   getEvents,
   getUser,
-  getEventsReport
+  getEventsReport,
 };
