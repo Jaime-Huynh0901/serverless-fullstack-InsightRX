@@ -12,6 +12,7 @@ const useForm = (callback, validate, validateNested) => {
     property: "",
     typeOfProp: "",
     valOfProp: "",
+    obj: [],
   };
 
   let nestedBlankProperty = {
@@ -28,6 +29,59 @@ const useForm = (callback, validate, validateNested) => {
 
   // state to get and set event Type, Source Name & Version number
   const [eventTypeState, setEventTypeState] = useState(blankEventType);
+  const [modalData, setModalData] = useState(blankEventType);
+
+  const [allObjState, setAllObjState] = useState([]);
+
+  //
+  const handleAllObj = (objState) => {
+    setAllObjState([...allObjState, objState]);
+  };
+
+  const handleEventTypeChange = (event) => {
+    const { name, value } = event.target;
+    setEventTypeState({
+      ...eventTypeState,
+      [name]: value,
+    });
+    if (name === "sourceName") {
+      setSearchTerm(value);
+      setDisplay(true);
+    }
+    setModalData({
+      ...modalData,
+      [name]: value,
+    });
+  };
+
+  const [sourceName, setSourceName] = useState({});
+
+  const getSourceData = async () => {
+    try {
+      const response = await httpRequest.getSources();
+      const sourceList = response.data.map((item) => item.eventSource);
+      setSourceName(sourceList);
+      console.log(sourceName);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleAutoComplete = (value) => {
+    setEventTypeState({
+      ...eventTypeState,
+      sourceName: value,
+    });
+    setDisplay(false);
+    setModalData({
+      ...modalData,
+      sourceName: value,
+    });
+  };
+
+  useEffect(() => {
+    getSourceData();
+  }, []);
 
   // state to get and set dynamic property name , type of the property and value of the property
   const [propState, setPropState] = useState([{ ...blankProperty }]);
@@ -37,24 +91,33 @@ const useForm = (callback, validate, validateNested) => {
     { ...nestedBlankProperty },
   ]);
 
+  // const handleObj = () => {
+  //   setPropState({ ...propState, obj: [...obj, nestedPropState] });
+  // };
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isObjectState, setIsObjectState] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [sourceName, setSourceName] = useState({});
+
   const [searchTerm, setSearchTerm] = useState("");
   const [display, setDisplay] = useState(false);
   const [visible, setShow] = useState(false);
 
   // State to get and set the modal data of the submitted event type, source name and version number
-  const [modalData, setModalData] = useState(blankEventType);
-  const [savedObject, setSavedObject] = useState(false);
-  const [objectIndex, setObjectIndex] = useState(0);
+
+  const [createdObject, setCreatedObject] = useState(0);
+
   const [nestedObjectIndex, setnestedObjectIndex] = useState(0);
 
   // state to get and set errors message
   const [errors, setErrors] = useState({});
   const [errorProp, setPropErrors] = useState([{}]);
   const [errorNestedProp, setNestedPropErrors] = useState([{}]);
+
+  const [objectIndex, setObjectIndex] = useState(0);
+  const handleNewObject = () => {
+    setCreatedObject(createdObject + 1);
+  };
 
   // All the handler function
   const handleClose = () => {
@@ -63,7 +126,6 @@ const useForm = (callback, validate, validateNested) => {
   };
   const handleShow = () => setShow(true);
 
-  const handleSaveObject = () => setSavedObject(true);
   const handleUpdatePropNum = () => setObjectIndex(objectIndex + 1);
 
   const handleUpdateIndex = () => {
@@ -89,34 +151,6 @@ const useForm = (callback, validate, validateNested) => {
       );
       setNestedPropState([...newArray]);
     }
-  };
-
-  const handleEventTypeChange = (event) => {
-    const { name, value } = event.target;
-    setEventTypeState({
-      ...eventTypeState,
-      [name]: value,
-    });
-    if (name === "sourceName") {
-      setSearchTerm(value);
-      setDisplay(true);
-    }
-    setModalData({
-      ...modalData,
-      [name]: value,
-    });
-  };
-
-  const handleAutoComplete = (value) => {
-    setEventTypeState({
-      ...eventTypeState,
-      sourceName: value,
-    });
-    setDisplay(false);
-    setModalData({
-      ...modalData,
-      sourceName: value,
-    });
   };
 
   const addProperty = () => {
@@ -152,10 +186,9 @@ const useForm = (callback, validate, validateNested) => {
     nestedBlankProperty.propNum = objectIndex;
     nestedBlankProperty.index = nestedObjectIndex;
     setNestedPropState([...nestedPropState, { ...nestedBlankProperty }]);
-    setSavedObject(false);
   };
 
-  const handleNestedPropChange = (event) => {
+  const handleNestedPropChange = (event, index) => {
     const { dataset, className, value } = event.target;
     const updatedProperty = [...nestedPropState];
     updatedProperty[dataset.idx][className] = value;
@@ -168,24 +201,6 @@ const useForm = (callback, validate, validateNested) => {
     updatedTypeProperty[index]["typeOfProp"] = typeDelta;
     setNestedPropState(updatedTypeProperty);
     console.log(index, typeDelta);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setErrors(validate(eventTypeState));
-
-    setIsSubmitting(true);
-    if (isObjectState) setIsObjectState(false);
-    handleShow();
-  };
-
-  const handleReset = () => {
-    setEventTypeState(blankEventType);
-    setPropState([{ ...blankProperty }]);
-    setNestedPropState([{ ...nestedBlankProperty }]);
-    if (isObjectState) setIsObjectState(false);
-    setnestedObjectIndex(1);
-    setObjectIndex(0);
   };
 
   useEffect(() => {
@@ -206,10 +221,6 @@ const useForm = (callback, validate, validateNested) => {
     }
   }, [errorNestedProp]);
 
-  useEffect(() => {
-    getSourceData();
-  }, []);
-
   const submitData = () => {
     const data = {
       staticField: eventTypeState,
@@ -228,15 +239,22 @@ const useForm = (callback, validate, validateNested) => {
       });
   };
 
-  const getSourceData = async () => {
-    try {
-      const response = await httpRequest.getSources();
-      const sourceList = response.data.map((item) => item.eventSource);
-      setSourceName(sourceList);
-      console.log(sourceName);
-    } catch (err) {
-      console.log(err);
-    }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setErrors(validate(eventTypeState));
+
+    setIsSubmitting(true);
+    if (isObjectState) setIsObjectState(false);
+    handleShow();
+  };
+
+  const handleReset = () => {
+    setEventTypeState(blankEventType);
+    setPropState([{ ...blankProperty }]);
+    setNestedPropState([{ ...nestedBlankProperty }]);
+    if (isObjectState) setIsObjectState(false);
+    setnestedObjectIndex(1);
+    setObjectIndex(0);
   };
 
   return {
@@ -254,9 +272,11 @@ const useForm = (callback, validate, validateNested) => {
     submitData,
     handleAutoComplete,
     handleClose,
-    handleSaveObject,
+    handleNewObject,
     handleUpdateIndex,
     handleUpdatePropNum,
+    handleAllObj,
+    // handleObj,
     propState,
     isObjectState,
     nestedPropState,
@@ -270,8 +290,25 @@ const useForm = (callback, validate, validateNested) => {
     display,
     visible,
     modalData,
-    savedObject,
+    createdObject,
   };
 };
 
 export default useForm;
+
+// state={
+//   newItemInput: '',
+//   selectedValue: '',
+//   buyItems :[],
+//   object : {}
+// }
+
+// addItem(e){
+//   e.preventDefault();
+//   const newItemInput = this.state.newItemInput;
+//   const newRadioValue = this.state.selectedValue;
+//   const obj = {'item':newItemInput, 'columnType':newRadioValue};
+//   this.setState({
+//       buyItems: [...this.state.buyItems, obj]
+//   });
+//   console.log(this.state.buyItems);

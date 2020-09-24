@@ -4,6 +4,7 @@ import {} from "antd";
 import styled from "styled-components";
 
 const NestedPropInput = ({
+  idx,
   nestedidx,
   nestedPropState,
   handleNestedTypeSelectChange,
@@ -38,7 +39,7 @@ const NestedPropInput = ({
         id={nestedPropId}
         className="property"
         value={nestedPropState[nestedidx].property}
-        onChange={handleNestedPropChange}
+        onChange={(e) => handleNestedPropChange(e, idx)}
       />
       <TypeOfNestedProp
         handleNestedTypeSelectChange={handleNestedTypeSelectChange}
@@ -50,7 +51,7 @@ const NestedPropInput = ({
         id={nestedvalId}
         className="valOfProp"
         value={nestedPropState[nestedidx].valOfProp}
-        onChange={handleNestedPropChange}
+        onChange={(e) => handleNestedPropChange(e, idx)}
         type="text"
       />
       <input

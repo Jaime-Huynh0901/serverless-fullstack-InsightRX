@@ -1,6 +1,5 @@
 import React from "react";
 import useDropdown from "./useDropdown";
-import NestedPropInput from "./NestedPropInput";
 import { Form, Row, Col } from "antd";
 import styled from "styled-components";
 import "./RegisterEventForm.css";
@@ -21,20 +20,15 @@ const Content = styled.div`
 const PropInputs = ({
   idx,
   propState,
-  nestedPropState,
   handleEventPropChange,
-  handleNestedPropChange,
   handleTypeSelectChange,
-  handleNestedTypeSelectChange,
   removeProperty,
-  removeNestedProperty,
   errorProp,
-  errorNestedProp,
 }) => {
-  const propId = `prop-${idx}`;
-  const valId = `val-${idx}`;
-  const delId = `del-${idx}`;
-  const typeList = ["string", "number", "object", "array", "boolean"];
+  const propId = `objprop-${idx}`;
+  const valId = `objval-${idx}`;
+  const delId = `objdel-${idx}`;
+  const typeList = ["string", "number", "array", "boolean"];
   const [type, TypeOfProp] = useDropdown(
     "        ",
     "",
@@ -47,7 +41,7 @@ const PropInputs = ({
     <>
       <Content>
         <Form {...layout} layout="horizontal" className="form-group">
-          <div key={`prop-${idx}`}>
+          <div key={`objprop-${idx}`}>
             <Row
               type="flex"
               align="middle"
@@ -55,13 +49,13 @@ const PropInputs = ({
               className="px-3 bg-white mh-page textCenter"
             >
               <Col span={6}>
-                <Form.Item label={`Property #${idx + 1}`}></Form.Item>
+                <Form.Item label={`Obj-Prop #${idx + 1}`}></Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="Type of Prop"></Form.Item>
+                <Form.Item label="Type of Obj-Prop"></Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label={`Value #${idx + 1}`}></Form.Item>
+                <Form.Item label={`Obj-Value #${idx + 1}`}></Form.Item>
               </Col>
               <Col span={6}>
                 <span>{/* No Text Here */}</span>
@@ -92,19 +86,17 @@ const PropInputs = ({
                 <TypeOfProp handleTypeSelectChange={handleTypeSelectChange} />
               </Col>
               <Col span={6}>
-                {type !== "object" ? (
-                  <Form.Item>
-                    <input
-                      name={valId}
-                      data-idx={idx}
-                      id={valId}
-                      className="valOfProp"
-                      value={propState[idx].valOfProp}
-                      onChange={handleEventPropChange}
-                      type="text"
-                    />
-                  </Form.Item>
-                ) : null}
+                <Form.Item>
+                  <input
+                    name={valId}
+                    data-idx={idx}
+                    id={valId}
+                    className="valOfProp"
+                    value={propState[idx].valOfProp}
+                    onChange={handleEventPropChange}
+                    type="text"
+                  />
+                </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item>
@@ -120,27 +112,6 @@ const PropInputs = ({
                   {errorProp[idx].errMessage && (
                     <p>{errorProp[idx].errMessage}</p>
                   )}
-                  {type === "object"
-                    ? nestedPropState
-                        .filter((arr) => arr.propNum === idx)
-                        .map((val) => (
-                          <Form.Item key={`Nestedprop-${val.index}`}>
-                            <NestedPropInput
-                              idx={idx}
-                              nestedidx={val.index}
-                              nestedPropState={nestedPropState}
-                              errorProp={errorProp}
-                              handleTypeSelectChange={handleTypeSelectChange}
-                              removeNestedProperty={removeNestedProperty}
-                              handleNestedPropChange={handleNestedPropChange}
-                              handleNestedTypeSelectChange={
-                                handleNestedTypeSelectChange
-                              }
-                              errorNestedProp={errorNestedProp}
-                            />
-                          </Form.Item>
-                        ))
-                    : null}
                 </Form.Item>
               </Col>
             </Row>
