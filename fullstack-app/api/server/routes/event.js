@@ -80,13 +80,11 @@ router.post("/eventtype", mw.authenticate, (req, res) => {
   const { eventType, sourceName, versionNumber } = objFromUI.staticField;
   const SchemaOptions = generateJSON.getSchemaOptions();
   generateJSON.allowAdditionalProperties(SchemaOptions);
-  const nestedObj = generateJSON.nestedObjConverter(
-    objFromUI.nestedDynamicField
-  );
   const dynamicObj = generateJSON.objConverter(
     objFromUI.dynamicField,
-    nestedObj
+    objFromUI.nestedDynamicField
   );
+  console.log(dynamicObj);
 
   try {
     const jsonToSchema = generateJSON.convertJsonToSchema(
@@ -99,6 +97,7 @@ router.post("/eventtype", mw.authenticate, (req, res) => {
       sourceName,
       jsonToSchema
     );
+    console.log(fullSchema);
     api.postData("/eventtype", fullSchema, req.locals);
     res.status(200).send({ success: "posted" });
   } catch (err) {

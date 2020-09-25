@@ -36,6 +36,16 @@ export const validateProperty = (propValues, idx) => {
     { errMessage: "" },
     { errMessage: "" },
     { errMessage: "" },
+    { errMessage: "" },
+    { errMessage: "" },
+    { errMessage: "" },
+    { errMessage: "" },
+    { errMessage: "" },
+    { errMessage: "" },
+    { errMessage: "" },
+    { errMessage: "" },
+    { errMessage: "" },
+    { errMessage: "" },
   ];
 
   propValues.map((value) => {

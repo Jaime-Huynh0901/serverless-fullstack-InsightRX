@@ -4,8 +4,7 @@ import EventInputs from "./EventInputs";
 import useForm from "./useForm";
 import { validate, validateProperty } from "./validationForm";
 import ConfirmModal from "./ConfirmModal";
-import ObjectProperty from "./ObjectProperty";
-import { Card, Row, Form } from "antd";
+import { Form } from "antd";
 import "./RegisterEventForm.css";
 
 export const EventTypeForm = () => {
@@ -24,11 +23,8 @@ export const EventTypeForm = () => {
     submitData,
     handleAutoComplete,
     handleClose,
-    handleNewObject,
     handleUpdateIndex,
     handleUpdatePropNum,
-    handleAllObj,
-    // handleObj,
     propState,
     isObjectState,
     nestedPropState,
@@ -42,7 +38,6 @@ export const EventTypeForm = () => {
     display,
     visible,
     modalData,
-    createdObject,
   } = useForm(submit, validate, validateProperty);
 
   function submit() {
@@ -80,37 +75,6 @@ export const EventTypeForm = () => {
         />
       ))}
 
-      {createdObject >= 1 ? (
-        <ObjectProperty handleAllObj={handleAllObj} />
-      ) : null}
-      {createdObject >= 2 ? (
-        <ObjectProperty handleAllObj={handleAllObj} />
-      ) : null}
-      {createdObject >= 3 ? (
-        <ObjectProperty handleAllObj={handleAllObj} />
-      ) : null}
-      {createdObject >= 4 ? (
-        <ObjectProperty handleAllObj={handleAllObj} />
-      ) : null}
-      {createdObject >= 5 ? (
-        <ObjectProperty handleAllObj={handleAllObj} />
-      ) : null}
-      {createdObject >= 6 ? (
-        <ObjectProperty handleAllObj={handleAllObj} />
-      ) : null}
-      {createdObject >= 7 ? (
-        <ObjectProperty handleAllObj={handleAllObj} />
-      ) : null}
-      {createdObject >= 8 ? (
-        <ObjectProperty handleAllObj={handleAllObj} />
-      ) : null}
-      {createdObject >= 9 ? (
-        <ObjectProperty handleAllObj={handleAllObj} />
-      ) : null}
-      {createdObject >= 10 ? (
-        <ObjectProperty handleAllObj={handleAllObj} />
-      ) : null}
-
       <div className="registerEventForm3">
         <Form.Item>
           {(propState[0].property && propState[0].valOfProp) ||
@@ -120,7 +84,6 @@ export const EventTypeForm = () => {
               value="Add Property"
               onClick={(e) => {
                 handleUpdatePropNum();
-                // handleObj();
                 addProperty();
               }}
               style={{
@@ -172,11 +135,6 @@ export const EventTypeForm = () => {
               color: "#ffffff",
               borderRadius: 7,
             }}
-          />
-          <input
-            type="button"
-            value="Add New Object"
-            onClick={handleNewObject}
           />
         </Form.Item>
 
