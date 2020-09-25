@@ -22,7 +22,7 @@ const useDropdown = (
         onBlur={(e) => setState(e.target.value)}
         disabled={!options.length}
       >
-        <option>Choose Prop Types</option>
+        <option>Choose PropTypes</option>
         {options.map((item) => (
           <option key={item} value={item}>
             {item}

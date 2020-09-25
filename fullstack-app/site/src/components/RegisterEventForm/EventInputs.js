@@ -7,6 +7,13 @@ import styled from "styled-components";
 import Logo from "../Logo/IRXlogo.js";
 
 const layout = { labelCol: { span: 24 }, wrapperCol: { span: 32 } };
+const BreadcrumbWrapper = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  margin: 0 auto;
+  margin-bottom: 0;
+`;
 const Content = styled.div`
   width: 100%;
   max-width: 800px;
@@ -32,24 +39,28 @@ const EventInputs = ({
 
   return (
     <div>
-      <Row
-        type="flex"
-        align="middle"
-        justify="left"
-        className="px-3 bg-white mh-page"
-        style={{ paddingTop: 10 }}
-      >
-        <Breadcrumb>
-          <h4>
-            <Breadcrumb.Item>
-              <Link to="/">Home</Link>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <Link to="/registerEvents">Register New Event</Link>
-            </Breadcrumb.Item>
-          </h4>
-        </Breadcrumb>
-      </Row>
+      <BreadcrumbWrapper>
+        <Row
+          type="flex"
+          align="middle"
+          justify="left"
+          className="px-3 bg-white mh-page"
+          style={{ paddingTop: 10 }}
+        >
+          <Breadcrumb>
+            <h4>
+              <Breadcrumb.Item>
+                <Link to="/">Home</Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Link to="/registerEvents" style={{ color: "#183045" }}>
+                  Register New Event
+                </Link>
+              </Breadcrumb.Item>
+            </h4>
+          </Breadcrumb>
+        </Row>
+      </BreadcrumbWrapper>
 
       <Row
         type="flex"

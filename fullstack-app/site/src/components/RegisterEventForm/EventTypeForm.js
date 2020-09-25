@@ -6,6 +6,7 @@ import { validate, validateProperty } from "./validationForm";
 import ConfirmModal from "./ConfirmModal";
 import { Form } from "antd";
 import "./RegisterEventForm.css";
+import Footer from "../Footer";
 
 export const EventTypeForm = () => {
   const {

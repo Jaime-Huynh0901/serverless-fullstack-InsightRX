@@ -22,6 +22,7 @@ import {
 import { Link } from "react-router-dom";
 
 import { Layout, Breadcrumb, Row, Col, Button } from "antd";
+import Footer from "../Footer";
 import "./Overview.css";
 /**
  * This component's responsibility is to display the data that it receives from its parent. If a component
@@ -34,7 +35,7 @@ class Events extends Component {
   }
 
   componentDidMount = () => {
-    const { dispatch } = this.props;
+    const { dispatch, reportQuery } = this.props;
   };
 
   /**
@@ -43,6 +44,8 @@ class Events extends Component {
    */
 
   render() {
+    const { dispatch, reportQuery } = this.props;
+
     return (
       <div className="App">
         <React.Fragment>
@@ -55,7 +58,9 @@ class Events extends Component {
                       <Link to="/">Home</Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                      <Link to="/Events">Events</Link>
+                      <Link to="/Events" style={{ color: "#183045" }}>
+                        Events
+                      </Link>
                     </Breadcrumb.Item>
                   </h4>
                 </Breadcrumb>
@@ -67,7 +72,7 @@ class Events extends Component {
                 <div
                   className="antd-card ant-card mb-4 ant-card-bordered"
                   style={{
-                    backgroundColor: "#007bff",
+                    backgroundColor: "#7b94b7",
                     borderRadius: 5,
                     minHeight: 144,
                   }}
@@ -90,7 +95,7 @@ class Events extends Component {
                 <div
                   className="antd-card ant-card mb-4 ant-card-bordered"
                   style={{
-                    backgroundColor: "#0000f5",
+                    backgroundColor: "#fada15",
                     borderRadius: 5,
                     minHeight: 144,
                   }}
@@ -113,7 +118,7 @@ class Events extends Component {
                 <div
                   className="antd-card ant-card mb-4 ant-card-bordered"
                   style={{
-                    backgroundColor: "#faad14",
+                    backgroundColor: "#fa8b15",
                     borderRadius: 5,
                     minHeight: 144,
                   }}
@@ -136,7 +141,7 @@ class Events extends Component {
                 <div
                   className="antd-card ant-card mb-4 ant-card-bordered"
                   style={{
-                    backgroundColor: "#f5222d",
+                    backgroundColor: "#f6222e",
                     borderRadius: 5,
                     minHeight: 144,
                   }}
@@ -160,15 +165,30 @@ class Events extends Component {
             <Row>
               <Col span={24}>
                 <div>
+                  <Button
+                    type="button"
+                    className="ant-btn ant-btn-lg"
+                    onClick={() => dispatch(fetchEvents(reportQuery))}
+                    style={{
+                      backgroundColor: "#7b94b7",
+                      borderRadius: 5,
+                      marginLeft: 7,
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                    }}
+                  >
+                    <span style={{ color: "#ffffff" }}>REFRESH CHART</span>
+                  </Button>
+
                   <CsvDownload
-                    data={this.props.eventsWithDates}
+                    data={this.props.filteredEvents}
                     filename="report_data.csv"
                     style={{ border: 0 }}
                   >
                     <Button
                       type="button"
-                      className="ant-btn ant-btn-primary ant-btn-lg"
-                      style={{ paddingTop: -10 }}
+                      className="ant-btn ant-btn-lg"
+                      style={{ backgroundColor: "#36bcb2", borderRadius: 5 }}
                     >
                       <i
                         aria-label="icon: download"
@@ -176,24 +196,23 @@ class Events extends Component {
                       >
                         <svg
                           viewBox="64 64 896 896"
-                          className=""
                           data-icon="download"
                           width="2em"
                           height="2em"
-                          fill="currentColor"
+                          fill="#ffffff"
                           aria-hidden="true"
                           focusable="true"
+                          style={{ paddingBottom: 4 }}
                         >
                           <path d="M505.7 661a8 8 0 0 0 12.6 0l112-141.7c4.1-5.2.4-12.9-6.3-12.9h-74.1V168c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v338.3H400c-6.7 0-10.4 7.7-6.3 12.9l112 141.8zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"></path>
                         </svg>
                       </i>
-                      <span>Download</span>
+                      <span style={{ color: "#ffffff" }}>Download</span>
                     </Button>
                   </CsvDownload>
                 </div>
               </Col>
             </Row>
-
             <Row
               style={{ width: "100%", padding: 0, margin: 0, marginTop: 20 }}
             >
@@ -214,7 +233,7 @@ class Events extends Component {
                     <div className="ant-card-head">
                       <div className="ant-card-head-wrapper">
                         <div className="ant-card-head-title">
-                          <h4 style={{ color: "#f5222d" }}>Events Over Time</h4>
+                          <h4 style={{ color: "#f6222e" }}>Events Over Time</h4>
                         </div>
                       </div>
                     </div>
@@ -226,6 +245,8 @@ class Events extends Component {
               </Col>
             </Row>
           </Layout>
+
+          <Footer />
         </React.Fragment>
       </div>
     );
