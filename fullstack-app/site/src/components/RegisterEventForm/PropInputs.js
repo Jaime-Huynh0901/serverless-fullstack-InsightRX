@@ -126,6 +126,7 @@ const PropInputs = ({
                         .map((val) => (
                           <Form.Item key={`Nestedprop-${val.index}`}>
                             <NestedPropInput
+                              idx={idx}
                               nestedidx={val.index}
                               nestedPropState={nestedPropState}
                               errorProp={errorProp}

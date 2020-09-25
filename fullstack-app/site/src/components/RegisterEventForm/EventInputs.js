@@ -3,7 +3,6 @@ import { useAutocomplete } from "../AutoComplete/useAutocomplete";
 import { Form, Input, Row, Breadcrumb } from "antd";
 import "./RegisterEventForm.css";
 import { Link } from "react-router-dom";
-
 import styled from "styled-components";
 import Logo from "../Logo/IRXlogo.js";
 

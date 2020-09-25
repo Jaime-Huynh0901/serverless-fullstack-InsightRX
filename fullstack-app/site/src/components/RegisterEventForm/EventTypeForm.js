@@ -4,7 +4,7 @@ import EventInputs from "./EventInputs";
 import useForm from "./useForm";
 import { validate, validateProperty } from "./validationForm";
 import ConfirmModal from "./ConfirmModal";
-import { Card, Row, Form } from "antd";
+import { Form } from "antd";
 import "./RegisterEventForm.css";
 
 export const EventTypeForm = () => {
@@ -23,7 +23,6 @@ export const EventTypeForm = () => {
     submitData,
     handleAutoComplete,
     handleClose,
-    handleSaveObject,
     handleUpdateIndex,
     handleUpdatePropNum,
     propState,
@@ -39,7 +38,6 @@ export const EventTypeForm = () => {
     display,
     visible,
     modalData,
-    savedObject,
   } = useForm(submit, validate, validateProperty);
 
   function submit() {
@@ -76,6 +74,7 @@ export const EventTypeForm = () => {
           handleNestedTypeSelectChange={handleNestedTypeSelectChange}
         />
       ))}
+
       <div className="registerEventForm3">
         <Form.Item>
           {(propState[0].property && propState[0].valOfProp) ||
@@ -112,13 +111,6 @@ export const EventTypeForm = () => {
                   borderRadius: 7,
                 }}
               />
-              {!savedObject ? (
-                <input
-                  type="button"
-                  value="Save the Object"
-                  onClick={handleSaveObject}
-                />
-              ) : null}
             </div>
           ) : null}
 
