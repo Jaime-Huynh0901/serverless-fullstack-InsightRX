@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import httpRequest from "../../clientsideAPI/httpRequest";
+import { getSession } from "../../utils/login";
 
 const useForm = (callback, validate, validateNested) => {
   //Global State
@@ -9,6 +10,7 @@ const useForm = (callback, validate, validateNested) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [display, setDisplay] = useState(false);
   const [visible, setShow] = useState(false);
+  const [userSession, setUserSession] = useState({});
 
   /*--------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------
@@ -44,12 +46,6 @@ const useForm = (callback, validate, validateNested) => {
     });
   };
 
-  //Handle data validation and display error message. only allow submission when there is no error
-  useEffect(() => {
-    if (Object.keys(errors).length === 0 && isSubmitting) {
-      callback();
-    }
-  }, [errors]);
   /* ---------- End of EventInputs --------- */
 
   /*--------------------------------------------------------------------------------------------------------------------------------
@@ -72,6 +68,7 @@ const useForm = (callback, validate, validateNested) => {
   //add new Property
   const addProperty = () => {
     setPropState([...propState, { ...blankProperty }]);
+    setIsObjectState(false);
   };
 
   //Handle input change and render the input
@@ -83,16 +80,31 @@ const useForm = (callback, validate, validateNested) => {
     setPropErrors(validateNested(propState, dataset.idx));
   };
 
+  const handleClearErrMessage = (index) => {
+    const updatedErrProperty = [...errorProp];
+    updatedErrProperty[index]["errMessage"] = "";
+    updatedErrProperty[0]["errorState"] = false;
+    setPropErrors(updatedErrProperty);
+  };
+
   //Handle type of data the user select
   const handleTypeSelectChange = (event, index, typeDelta) => {
-    console.log(isObjectState);
+    // console.log(isObjectState);
     const updatedTypeProperty = [...propState];
     updatedTypeProperty[index]["typeOfProp"] = typeDelta;
     setPropState(updatedTypeProperty);
+
     if (propState[event.target.dataset.idx]["typeOfProp"] === "object") {
       setIsObjectState(true);
+      handleClearErrMessage(event.target.dataset.idx);
     } else {
       setIsObjectState(false);
+    }
+    if (
+      typeDelta === "object" &&
+      updatedTypeProperty[event.target.dataset.idx]["valOfProp"] === ""
+    ) {
+      handleClearErrMessage(event.target.dataset.idx);
     }
   };
 
@@ -104,16 +116,11 @@ const useForm = (callback, validate, validateNested) => {
         (obj) => propState.indexOf(obj) !== parseInt(index)
       );
       setPropState([...newArray]);
-      console.log(newArray);
+      // console.log(newArray);
     }
+    handleClearErrMessage(index);
   };
 
-  //Handle data validation and display error message. only allow submission when there is no error
-  useEffect(() => {
-    if (Object.keys(errorProp).length === 0 && isSubmitting) {
-      callback();
-    }
-  }, [errorProp]);
   /* ---------- End of PropInputs --------- */
 
   /*--------------------------------------------------------------------------------------------------------------------------------
@@ -152,6 +159,7 @@ const useForm = (callback, validate, validateNested) => {
     nestedBlankProperty.propNum = propNumState;
     nestedBlankProperty.index = nestedObjectIndex;
     setNestedPropState([...nestedPropState, { ...nestedBlankProperty }]);
+    setNestedPropErrors(validateNested(nestedPropState, nestedObjectIndex));
   };
 
   //Handle input change and render the input
@@ -163,31 +171,36 @@ const useForm = (callback, validate, validateNested) => {
     setNestedPropErrors(validateNested(nestedPropState, dataset.idx));
   };
 
+  const clearErrMessage = (index) => {
+    const updatedErrProperty = [...errorNestedProp];
+    updatedErrProperty[index]["errMessage"] = "";
+    setNestedPropErrors(updatedErrProperty);
+  };
+
   //Handle type of data the user select
   const handleNestedTypeSelectChange = (event, index, typeDelta) => {
     const updatedTypeProperty = [...nestedPropState];
     updatedTypeProperty[index]["typeOfProp"] = typeDelta;
     setNestedPropState(updatedTypeProperty);
-    console.log(index, typeDelta);
+
+    // console.log(index, typeDelta);
   };
 
   //Remove the property / Delete button function
   const removeNestedProperty = (e) => {
     const index = e.target.dataset.idx;
-    if (index > 0) {
-      const newArray = nestedPropState.filter(
-        (obj) => nestedPropState.indexOf(obj) !== parseInt(index)
-      );
-      setNestedPropState([...newArray]);
-    }
+
+    const newArray = nestedPropState.filter(
+      (obj) => nestedPropState.indexOf(obj) !== parseInt(index)
+    );
+    setNestedPropState([...newArray]);
+    clearErrMessage(index);
   };
 
-  //Handle data validation and display error message. only allow submission when there is no error
-  useEffect(() => {
-    if (Object.keys(errorNestedProp).length === 0 && isSubmitting) {
-      callback();
-    }
-  }, [errorNestedProp]);
+  const handleSavedObj = () => {
+    setIsObjectState(false);
+  };
+
   /* ---------- End of NestedPropInput --------- */
 
   /*--------------------------------------------------------------------------------------------------------------------------------
@@ -201,7 +214,7 @@ const useForm = (callback, validate, validateNested) => {
   // Handle close of the modal and reset the form
   const handleClose = () => {
     setShow(false);
-    window.location.reload();
+    window.location.reload(false);
   };
 
   // handle show the modal when successfully register new event type
@@ -252,7 +265,7 @@ const useForm = (callback, validate, validateNested) => {
 ----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 
-  /* ---------- Submit & Reset --------- */
+  /* ---------- Submit, Reset & User Session --------- */
 
   // Submit the data, post request to register new event type
   const submitData = () => {
@@ -273,11 +286,21 @@ const useForm = (callback, validate, validateNested) => {
       });
   };
 
+  //Handle data validation and display error message. only allow submission when there is no error
+  useEffect(() => {
+    if (
+      Object.keys(errors).length === 0 &&
+      isSubmitting &&
+      errorProp[0].errorState === false
+    ) {
+      callback();
+    }
+  }, [errors, errorProp, isSubmitting]);
+
   // Handle Submit state
   const handleSubmit = (event) => {
     event.preventDefault();
     setErrors(validate(eventTypeState));
-
     setIsSubmitting(true);
     if (isObjectState) setIsObjectState(false);
     handleShow();
@@ -287,11 +310,20 @@ const useForm = (callback, validate, validateNested) => {
   const handleReset = () => {
     setEventTypeState(blankEventType);
     setPropState([{ ...blankProperty }]);
-    setNestedPropState([{ ...nestedBlankProperty }]);
+    setNestedPropState([]);
+    setDisplay(false);
     if (isObjectState) setIsObjectState(false);
     setnestedObjectIndex(0);
     setPropNumState(0);
+    setErrors({});
   };
+
+  // Get the user Session (user email) and save it to the userSession State
+  useEffect(() => {
+    const userSession = getSession();
+    setUserSession(userSession);
+  }, []);
+
   /* ---------- End of Submit & Reset --------- */
 
   return {
@@ -311,6 +343,8 @@ const useForm = (callback, validate, validateNested) => {
     handleClose,
     handleUpdateIndex,
     handleUpdatePropNum,
+    handleSavedObj,
+    setDisplay,
     propState,
     isObjectState,
     nestedPropState,
@@ -324,6 +358,7 @@ const useForm = (callback, validate, validateNested) => {
     display,
     visible,
     modalData,
+    userSession,
   };
 };
 

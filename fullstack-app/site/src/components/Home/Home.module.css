@@ -14,6 +14,7 @@
   flex-direction: column;
   box-sizing: border-box;
   background: #000;
+  color: #ffffff;
   width: 100%;
   height: 100%;
   align-self: center;
@@ -92,14 +93,14 @@
  * Special
  */
 
-::-moz-selection { 
-  background: #fd5750; 
+::-moz-selection {
+  background: #fd5750;
   color: #ffffff;
   opacity: 1;
 }
 
-::selection { 
-  background: #fd5750; 
+::selection {
+  background: #fd5750;
   color: #ffffff;
   opacity: 1;
 }

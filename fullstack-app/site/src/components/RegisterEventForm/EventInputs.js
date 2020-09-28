@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
+import { Breadcrumb, Form, Input, Row } from "antd";
 import { useAutocomplete } from "../AutoComplete/useAutocomplete";
-import { Form, Input, Row, Breadcrumb } from "antd";
 import "./RegisterEventForm.css";
 import { Link } from "react-router-dom";
+
+import httpRequest from "../../clientsideAPI/httpRequest";
+
 import styled from "styled-components";
+// import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Logo from "../Logo/IRXlogo.js";
 
 const layout = { labelCol: { span: 24 }, wrapperCol: { span: 32 } };
+const BreadcrumbWrapper = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  margin: 0 auto;
+  margin-bottom: 0;
+`;
+
 const Content = styled.div`
   width: 100%;
   max-width: 800px;
@@ -26,30 +38,36 @@ const EventInputs = ({
   searchTerm,
   sourceName,
   display,
+  setDisplay,
+  userSession,
 }) => {
   const corpus = sourceName;
   const [completions] = useAutocomplete(searchTerm, corpus);
 
   return (
     <div>
-      <Row
-        type="flex"
-        align="middle"
-        justify="left"
-        className="px-3 bg-white mh-page"
-        style={{ paddingTop: 10 }}
-      >
-        <Breadcrumb>
-          <h4>
-            <Breadcrumb.Item>
-              <Link to="/">Home</Link>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <Link to="/registerEvents">Register New Event</Link>
-            </Breadcrumb.Item>
-          </h4>
-        </Breadcrumb>
-      </Row>
+      <BreadcrumbWrapper>
+        <Row
+          type="flex"
+          align="middle"
+          justify="left"
+          className="px-3 bg-white mh-page"
+          style={{ paddingTop: 10 }}
+        >
+          <Breadcrumb>
+            <h4>
+              <Breadcrumb.Item>
+                <Link to="/">Home</Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Link to="/registerEvents" style={{ color: "#183045" }}>
+                  Register New Event
+                </Link>
+              </Breadcrumb.Item>
+            </h4>
+          </Breadcrumb>
+        </Row>
+      </BreadcrumbWrapper>
 
       <Row
         type="flex"
@@ -57,7 +75,7 @@ const EventInputs = ({
         justify="center"
         className="px-3 bg-white mh-page"
       >
-        <Content>
+        <Content className="noBorders">
           <Form
             {...layout}
             labelCol={{ span: 24 }}
@@ -68,29 +86,36 @@ const EventInputs = ({
             <div
               className="text-center mb-8"
               style={{
-                backgroundColor: "#001529",
+                backgroundColor: "#183045",
                 paddingTop: 8,
                 paddingBottom: 5,
               }}
             >
-              {/* <a className="brand mr-0">
+              <a className="brand mr-0">
                 <Logo
                   size={32}
                   strokeWidth={1}
-                  style={{ backgroundColor: "#001529" }}
+                  style={{ backgroundColor: "#183045" }}
                 />
-              </a> */}
+              </a>
             </div>
             <div className="text-center mb-8">
               <h3 className="mb-0 mt-3 textCenter" style={{ paddingTop: 10 }}>
-                Hero Event Generator
+                Villian Event Generator
               </h3>
-              <h5>Welcome, User #123</h5>
+              <h5>Welcome User: {userSession.userEmail}</h5>
               <small className="text-muted">
                 <span>
                   Use the form below to create new event type.
                   <br />
-                  Hit add to add more property and value fields.
+                  Hit Add Property to add additional property(ies).
+                  <br />
+                  Hit Add Object Property to add more Object Property.
+                  <br />
+                  Hit Save Object to save the Object and go to the next Event
+                  Property.
+                  <br />
+                  Hit Reset to Reset the Event Definition.
                   <br />
                   Hit submit to submit new field type.
                 </span>
@@ -136,6 +161,7 @@ const EventInputs = ({
                 id="versionName"
                 value={eventTypeState.versionName}
                 onChange={handleEventTypeChange}
+                onFocus={(e) => setDisplay(false)}
               />
               {errors.versionName && <p>{errors.versionName}</p>}
             </Form.Item>

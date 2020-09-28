@@ -1,5 +1,4 @@
-
-
+/* CSS for Overview, Events */
 
 .overview {
     width: 100%;
@@ -47,3 +46,11 @@
     padding-right: 0px;
     margin-top: 20px;    
 }
+
+@media only screen and (max-width: 960px) {
+    .overview {
+        border: 0px;
+        }
+  }
+
+  

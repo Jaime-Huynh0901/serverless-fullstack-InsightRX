@@ -1,3 +1,5 @@
+/* CSS for Register Event Form */
+
 .registerEventForm1 {
   width: 100%;
   max-width: 800px;
@@ -33,3 +35,12 @@
 .textCenter {
   text-align: center;
 }
+
+@media only screen and (max-width: 960px) {
+  .noBorders {
+    border: 0px;
+  }
+  .registerEventForm3 {
+    border: 0px;
+  }
+} ;

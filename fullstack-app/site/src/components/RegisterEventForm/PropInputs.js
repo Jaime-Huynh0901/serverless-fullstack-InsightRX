@@ -34,11 +34,19 @@ const PropInputs = ({
   const propId = `prop-${idx}`;
   const valId = `val-${idx}`;
   const delId = `del-${idx}`;
-  const typeList = ["string", "number", "object", "array", "boolean"];
+  const typeList1 = ["string", "number", "array", "boolean"];
+  const typeList2 = ["string", "number", "object", "array", "boolean"];
+  const [firstType, FirstTypeOfProp] = useDropdown(
+    "        ",
+    "",
+    typeList1,
+    handleTypeSelectChange,
+    0
+  );
   const [type, TypeOfProp] = useDropdown(
     "        ",
     "",
-    typeList,
+    typeList2,
     handleTypeSelectChange,
     idx
   );
@@ -46,8 +54,8 @@ const PropInputs = ({
   return (
     <>
       <Content>
-        <Form {...layout} layout="horizontal" className="form-group">
-          <div key={`prop-${idx}`}>
+        <div key={`prop-${idx}`}>
+          <Form {...layout} layout="horizontal" className="form-group">
             <Row
               type="flex"
               align="middle"
@@ -61,7 +69,9 @@ const PropInputs = ({
                 <Form.Item label="Type of Prop"></Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label={`Value #${idx + 1}`}></Form.Item>
+                {type !== "object" ? (
+                  <Form.Item label={`Value #${idx + 1}`}></Form.Item>
+                ) : null}
               </Col>
               <Col span={6}>
                 <span>{/* No Text Here */}</span>
@@ -89,7 +99,13 @@ const PropInputs = ({
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <TypeOfProp handleTypeSelectChange={handleTypeSelectChange} />
+                {idx === 0 ? (
+                  <FirstTypeOfProp
+                    handleTypeSelectChange={handleTypeSelectChange}
+                  />
+                ) : (
+                  <TypeOfProp handleTypeSelectChange={handleTypeSelectChange} />
+                )}
               </Col>
               <Col span={6}>
                 {type !== "object" ? (
@@ -107,45 +123,50 @@ const PropInputs = ({
                 ) : null}
               </Col>
               <Col span={6}>
-                <Form.Item>
-                  <input
-                    type="button"
-                    name={delId}
-                    data-idx={idx}
-                    id={delId}
-                    className="deleteButton"
-                    value="Delete"
-                    onClick={removeProperty}
-                  />
-                  {errorProp[idx].errMessage && (
-                    <p>{errorProp[idx].errMessage}</p>
-                  )}
-                  {type === "object"
-                    ? nestedPropState
-                        .filter((arr) => arr.propNum === idx)
-                        .map((val) => (
-                          <Form.Item key={`Nestedprop-${val.index}`}>
-                            <NestedPropInput
-                              idx={idx}
-                              nestedidx={val.index}
-                              nestedPropState={nestedPropState}
-                              errorProp={errorProp}
-                              handleTypeSelectChange={handleTypeSelectChange}
-                              removeNestedProperty={removeNestedProperty}
-                              handleNestedPropChange={handleNestedPropChange}
-                              handleNestedTypeSelectChange={
-                                handleNestedTypeSelectChange
-                              }
-                              errorNestedProp={errorNestedProp}
-                            />
-                          </Form.Item>
-                        ))
-                    : null}
-                </Form.Item>
+                {idx >= 1 && (
+                  <Form.Item>
+                    <input
+                      type="button"
+                      name={delId}
+                      data-idx={idx}
+                      id={delId}
+                      className="deleteButton"
+                      value="Delete"
+                      style={{ backgroundColor: "#faad14" }}
+                      onClick={removeProperty}
+                    />
+                  </Form.Item>
+                )}
               </Col>
+              {errorProp[idx].errMessage && (
+                <p style={{ color: "red", fontWeight: "bold" }}>
+                  {errorProp[idx].errMessage}
+                </p>
+              )}
+              {type === "object"
+                ? nestedPropState
+                    .filter((arr) => arr.propNum === idx)
+                    .map((val) => (
+                      <Form.Item key={`Nestedprop-${val.index}`}>
+                        <NestedPropInput
+                          idx={idx}
+                          nestedidx={val.index}
+                          nestedPropState={nestedPropState}
+                          errorProp={errorProp}
+                          handleTypeSelectChange={handleTypeSelectChange}
+                          removeNestedProperty={removeNestedProperty}
+                          handleNestedPropChange={handleNestedPropChange}
+                          handleNestedTypeSelectChange={
+                            handleNestedTypeSelectChange
+                          }
+                          errorNestedProp={errorNestedProp}
+                        />
+                      </Form.Item>
+                    ))
+                : null}
             </Row>
-          </div>
-        </Form>
+          </Form>
+        </div>
       </Content>
     </>
   );
