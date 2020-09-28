@@ -43,16 +43,10 @@ class Dashboard extends Component {
               {this.state.session ? this.state.session.userEmail : ""}
             </div>
             <div className={`link`} onClick={this.logout}>
-              logout
+              <a>logout</a>
             </div>
             <div>
-              <Link to="/Overview">Overview</Link>
-            </div>
-            <div>
-              <Link to="/Events">Events</Link>
-            </div>
-            <div>
-              <Link to="/registerEvents">RegisterEvents</Link>
+              <Link to="/Overview">Villain</Link>
             </div>
           </div>
 
@@ -62,13 +56,13 @@ class Dashboard extends Component {
             <div className={`${styles.artwork} animateFlicker`}>
               <img
                 draggable="false"
-                src={"./fullstack-app-artwork.png"}
-                alt="serverless-fullstack-application"
+                src={"./insight-rx-logo.png"}
+                alt="Insight RX Logo"
               />
             </div>
 
             <div className={`${styles.welcomeMessage}`}>
-              Welcome to your serverless fullstack dashboard...
+              Welcome to your IRX Villain application
             </div>
           </div>
         </div>

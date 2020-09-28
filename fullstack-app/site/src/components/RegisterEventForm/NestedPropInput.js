@@ -52,15 +52,17 @@ const NestedPropInput = ({
                 label={`Nested-Property #${idx + 1}.${nestedidx}`}
               ></Form.Item>
             </Col>
+            <Col span={2} />
             <Col span={6}>
               <Form.Item label="Type of Prop"></Form.Item>
             </Col>
+            <Col span={1} />
             <Col span={6}>
               <Form.Item
                 label={`Nested-Value #${idx + 1}.${nestedidx}`}
               ></Form.Item>
             </Col>
-            <Col span={6}>
+            <Col span={3}>
               <span>{/* No Text Here */}</span>
             </Col>
           </Row>
@@ -70,7 +72,7 @@ const NestedPropInput = ({
             align="top"
             justify="center"
             className="px-3 bg-white mh-page textCenter"
-            style={{ margin: 20, padding: 0 }}
+            style={{ margin: 0, padding: 0 }}
           >
             <Col span={6}>
               <Form.Item>
@@ -85,11 +87,13 @@ const NestedPropInput = ({
                 />
               </Form.Item>
             </Col>
+            <Col span={2} />
             <Col span={6}>
               <TypeOfNestedProp
                 handleNestedTypeSelectChange={handleNestedTypeSelectChange}
               />
             </Col>
+            <Col span={1} />
             <Col span={6}>
               <Form.Item>
                 <input
@@ -103,8 +107,8 @@ const NestedPropInput = ({
                 />
               </Form.Item>
             </Col>
-            <Col span={6}>
-              <Form.Item>
+            <Col span={3}>
+              {/* <Form.Item>
                 <input
                   type="button"
                   name={delId}
@@ -115,10 +119,12 @@ const NestedPropInput = ({
                   style={{ backgroundColor: "#faad14" }}
                   onClick={removeNestedProperty}
                 />
-              </Form.Item>
+              </Form.Item> */}
             </Col>
             {errorNestedProp[nestedidx].errMessage && (
-              <p>{errorNestedProp[nestedidx].errMessage}</p>
+              <p style={{ color: "red", fontWeight: "bold" }}>
+                {errorNestedProp[nestedidx].errMessage}
+              </p>
             )}
           </Row>
         </div>

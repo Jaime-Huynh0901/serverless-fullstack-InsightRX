@@ -8,7 +8,7 @@ import httpRequest from '../../clientsideAPI/httpRequest';
 
 export const SET_ALLSOURCES = 'SET_ALLSOURCES' 
 export const SET_SOURCENAME = 'SET_SOURCENAME' 
-export const SET_SELECTEDSOURCES = 'SELECTEDSOURCES'
+export const SET_SELECTEDSOURCES = 'SET_SELECTEDSOURCES'
 export const SET_VERSIONNUMBER = 'SET_VERSIONNUMBER' 
 export const SET_EVENTTYPE = 'SET_EVENTTYPE' 
 export const SET_REGISTEREDEVENTS = 'SET_REGISTEREDEVENTS'
@@ -49,7 +49,7 @@ export const setSelectedSources = data => {
 
 	return { 
 		type: SET_SELECTEDSOURCES, // Actions must have a type property that indicates the type of action being performed
-		payload: data  // event - action payload
+		payload: data[0]  // event - action payload
 			// filteredEvents, registeredEvents, "source-name": e.value
 	}
   }

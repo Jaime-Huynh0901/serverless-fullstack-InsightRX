@@ -10,8 +10,8 @@ export const validate = (values) => {
 
   if (!values.sourceName) {
     errors.sourceName = "Source Name is required";
-  } else if (!/^[a-zA-Z0-9_]*$/.test(values.eventType)) {
-    errors.eventType =
+  } else if (!/^[a-zA-Z0-9_]*$/.test(values.sourceName)) {
+    errors.sourceName =
       "Source Name is invalid. Allow any alphanumeric character incuding underscore .Do not enter any space or any special characters (!,@,#...)";
   }
 
@@ -26,7 +26,7 @@ export const validate = (values) => {
 
 export const validateProperty = (propValues, idx) => {
   let errors = [
-    { errMessage: "" },
+    { id: 1, errMessage: "", errorState: false },
     { errMessage: "" },
     { errMessage: "" },
     { errMessage: "" },
@@ -48,13 +48,14 @@ export const validateProperty = (propValues, idx) => {
     { errMessage: "" },
   ];
 
-  propValues.map((value) => {
-    for (let i = idx; i <= idx; i++) {
+  propValues.map((value, i) => {
+    if (value.valOfProp !== "") {
       switch (value.typeOfProp) {
         case "array":
           if (!/^([a-z0-9\s]+,)*([a-z0-9\s]+){1}$/.test(value.valOfProp)) {
             errors[i].errMessage =
               "Property value (array) is invalid. Make sure to seperate item in the array by comma";
+            errors[0].errorState = true;
           }
           break;
         case "string":
@@ -75,6 +76,22 @@ export const validateProperty = (propValues, idx) => {
               "Property value (boolean) is invalid. Only allow 'true' or 'false'";
           }
           break;
+      }
+    } else {
+      if (value.property === "" && value.valOfProp === "") {
+        errors[i].errMessage = "Property name & value are required";
+        errors[0].errorState = true;
+      }
+      if (value.property === "") {
+        errors[i].errMessage = "Property name is required";
+        errors[0].errorState = true;
+      }
+      if (value.valOfProp === "" && value.typeOfProp !== "object") {
+        errors[i].errMessage = "value is required";
+        errors[0].errorState = true;
+      } else {
+        errors[i].errMessage = "";
+        errors[0].errorState = false;
       }
     }
   });

@@ -6,12 +6,12 @@ import { connect } from 'react-redux';
 
 const Barchart = ({ eventsReport }) => {
  const data = eventsReport;
- if ( eventsReport ) {
+ if ( eventsReport || eventsReport.length > 0 ) {
 
   const config = { 
     data,
     forceFit:true, 
-    title:{ 
+    title: { 
       visible: true, 
       text : 'Events Report' , 
     },
@@ -21,29 +21,29 @@ const Barchart = ({ eventsReport }) => {
         'Events' ,
     },
     xField: 'eventCount',
+    xAxis: {
+      title: {
+        visible: true,
+        text: 'Count of Events'
+      }
+    },
     yField: 'typeName',
+    yAxis: {
+      title: {
+        visible: true,
+        text: 'Event Type Name'
+      }
+    },
     colorField: 'eventCount',
     color: ['#55A6F3', '#CED4DE', '#55A6F3', '#55A6F3', '#55A6F3'],
-    point: {
-        visible: true,
-        size: 5,
-        shape: 'diamond',
-        style: {
-          fill: 'white',
-          stroke: '#2593fc',
-          lineWidth: 2,
-        }
-    },
     label: {
-      visible:true, 
+      visible: true, 
       position: 'middle',
       adjustColor: true,
-    },
+    }
   };
-  // try {
 
    return <Bar {...config} />;
-  // }
 
 } else {
     

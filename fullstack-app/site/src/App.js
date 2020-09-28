@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./components/Home/Home";
 import Auth from "./components/Auth/Auth";
@@ -7,6 +7,8 @@ import Overview from "./components/Overview/Overview";
 import Events from "./components/Overview/Events";
 import { getSession } from "./utils/login";
 import { EventTypeForm } from "./components/RegisterEventForm/EventTypeForm";
+import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
 
 import "antd/dist/antd.css";
 import "./css1-normalize.css";
@@ -33,15 +35,19 @@ const App = () => {
           </Route>
 
           <Route exact path="/overview">
+            <Navigation />
             <Overview />
           </Route>
 
           <Route exact path="/events">
+            <Navigation />
             <Events />
           </Route>
 
           <Route exact path="/registerEvents">
+            <Navigation />
             <EventTypeForm />
+            <Footer />
           </Route>
 
           <PrivateRoute exact path="/" component={Dashboard} />

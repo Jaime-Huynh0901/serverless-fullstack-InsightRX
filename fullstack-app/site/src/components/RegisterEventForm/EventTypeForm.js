@@ -1,10 +1,10 @@
 import React from "react";
+import { Form } from "antd";
 import PropInputs from "./PropInputs";
 import EventInputs from "./EventInputs";
 import useForm from "./useForm";
 import { validate, validateProperty } from "./validationForm";
 import ConfirmModal from "./ConfirmModal";
-import { Form } from "antd";
 import "./RegisterEventForm.css";
 import Footer from "../Footer";
 
@@ -26,6 +26,8 @@ export const EventTypeForm = () => {
     handleClose,
     handleUpdateIndex,
     handleUpdatePropNum,
+    handleSavedObj,
+    setDisplay,
     propState,
     isObjectState,
     nestedPropState,
@@ -39,12 +41,12 @@ export const EventTypeForm = () => {
     display,
     visible,
     modalData,
+    userSession,
   } = useForm(submit, validate, validateProperty);
 
   function submit() {
     console.log("Submitted successfully!");
     submitData();
-    handleReset();
   }
 
   return (
@@ -56,7 +58,9 @@ export const EventTypeForm = () => {
         sourceName={sourceName}
         searchTerm={searchTerm}
         errors={errors}
+        setDisplay={setDisplay}
         display={display}
+        userSession={userSession}
       />
 
       {propState.map((val, idx) => (
@@ -78,8 +82,10 @@ export const EventTypeForm = () => {
 
       <div className="registerEventForm3">
         <Form.Item>
-          {(propState[0].property && propState[0].valOfProp) ||
-          (propState[0].property && propState[0].typeOfProp === "object") ? (
+          {errorProp[0].errorState === false &&
+          !isObjectState &&
+          ((propState[0].property && propState[0].valOfProp) ||
+            (propState[0].property && propState[0].typeOfProp === "object")) ? (
             <input
               type="button"
               value="Add Property"
@@ -100,11 +106,22 @@ export const EventTypeForm = () => {
             <div>
               <input
                 type="button"
-                value="Add Nested Property"
+                value="Add Object Property"
                 onClick={(e) => {
                   handleUpdateIndex();
                   addNestedProperty();
                 }}
+                style={{
+                  fontSize: "1em",
+                  backgroundColor: "#33FFFC",
+                  color: "black",
+                  borderRadius: 7,
+                }}
+              />
+              <input
+                type="button"
+                value="Save Object"
+                onClick={handleSavedObj}
                 style={{
                   fontSize: "1em",
                   backgroundColor: "#33FFFC",
@@ -126,17 +143,20 @@ export const EventTypeForm = () => {
               borderRadius: 7,
             }}
           />
-          <input
-            type="submit"
-            value="Submit"
-            onClick={handleSubmit}
-            style={{
-              fontSize: "1em",
-              backgroundColor: "#007bff",
-              color: "#ffffff",
-              borderRadius: 7,
-            }}
-          />
+          {errorProp[0].errorState === false ||
+          errorNestedProp[0].errorState === false ? (
+            <input
+              type="submit"
+              value="Submit"
+              onClick={handleSubmit}
+              style={{
+                fontSize: "1em",
+                backgroundColor: "#007bff",
+                color: "#ffffff",
+                borderRadius: 7,
+              }}
+            />
+          ) : null}
         </Form.Item>
 
         {submitted ? (
